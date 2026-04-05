@@ -5,7 +5,7 @@
 // Replace with your WiFi and Web App details
 //const char* ssid = "📶WirelessFirmware📶";
 //const char* password = "ElektroCyberSecurityKonijn";
-const char* scriptURL = "https://script.google.com/macros/s/AKfycby6KvrA3uAB1FLEMg6Bq_c-dJKz_QHkdpoLjahj5M_vWBPY-2mPQZLRW2NHZ4unQE316g/exec";
+const char* scriptURL = "https://script.google.com/macros/s/AKfycbyPjrZTHLC2_Jok2N8-GvB7FWMFaMFcZbVBjeDbG-SJF6LC_jhGntdcSAEA6uIJueUM9w/exec";
 const char* ssid = "S21 van Sjoerd";
 const char* password = "ugki4500";
  
@@ -22,20 +22,26 @@ void setup() {
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
     HTTPClient http;
-    WiFiClientSecure client;
+    WiFiClient  ;
 
     http.begin(client, scriptURL);
     http.addHeader("Content-Type", "application/json");
  
     // Replace with your sensor data
+    //float temp = random(20, 30);  // Simulated temperature
+    //float hum = random(40, 60);   // Simulated humidity
+    //String Time = "time"; 
+    //String pres = "Pres";
+    //String mass = "Mass";
+    
+    //String jsonData = "{\"Temp\": " + String(Time) + ", \"Temp\": " + String(temp) + ", \"Hum\": " + String(hum) + ", \"Pres\": " + String(pres) + ", \"Mass\": " + String(mass) +"}";
+ 
     float temp = random(20, 30);  // Simulated temperature
     float hum = random(40, 60);   // Simulated humidity
-    String Time = "time"; 
-    String pres = "Pres";
-    String mass = "Mass";
-    
-    String jsonData = "{\"Temp\": " + String(Time) + ", \"Temp\": " + String(temp) + ", \"Hum\": " + String(hum) + ", \"Pres\": " + String(pres) + ", \"Mass\": " + String(mass) +"}";
  
+    String jsonData = "{\"temp\": " + String(temp) + ", \"hum\": " + String(hum) + "}";
+
+
     int httpResponseCode = http.POST(jsonData);
  
     Serial.println("Response code: " + String(httpResponseCode));
