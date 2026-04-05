@@ -1,11 +1,13 @@
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
+#include <WiFiClientSecureBearSSL.h>
+
  
 // Replace with your WiFi and Web App details
 //const char* ssid = "📶WirelessFirmware📶";
 //const char* password = "ElektroCyberSecurityKonijn";
-const char* scriptURL = "https://script.google.com/macros/s/AKfycbyPjrZTHLC2_Jok2N8-GvB7FWMFaMFcZbVBjeDbG-SJF6LC_jhGntdcSAEA6uIJueUM9w/exec";
+const char* scriptURL = "https://script.google.com/macros/s/AKfycbymWAoic5WTgZoxp1sjdReDGKZ3s_Arxp831kt8tEvcVZpcdE2lo33ol5yg4g38s-jPCw/exec";
 const char* ssid = "S21 van Sjoerd";
 const char* password = "ugki4500";
  
@@ -21,25 +23,28 @@ void setup() {
  
 void loop() {
   if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    WiFiClient  ;
+    std::unique_ptr<BearSSL::WiFiClientSecure>client(new BearSSL::WiFiClientSecure);
+    client->setInsecure();
 
-    http.begin(client, scriptURL);
+
+    HTTPClient http;
+
+    http.begin(*client, scriptURL);
     http.addHeader("Content-Type", "application/json");
  
     // Replace with your sensor data
-    //float temp = random(20, 30);  // Simulated temperature
-    //float hum = random(40, 60);   // Simulated humidity
-    //String Time = "time"; 
-    //String pres = "Pres";
-    //String mass = "Mass";
-    
-    //String jsonData = "{\"Temp\": " + String(Time) + ", \"Temp\": " + String(temp) + ", \"Hum\": " + String(hum) + ", \"Pres\": " + String(pres) + ", \"Mass\": " + String(mass) +"}";
- 
     float temp = random(20, 30);  // Simulated temperature
     float hum = random(40, 60);   // Simulated humidity
+    float time = random(40, 60);
+    float pres = random(40, 60);
+    float masss = random(40, 60);
+    
+    //String jsonData = "{\"time\": " + String(Time) + ", \"temp\": " + String(temp) + ", \"hum\": " + String(hum) + ", \"pres\": " + String(pres) + ", \"mass\": " + String(mass) +"}";
  
-    String jsonData = "{\"temp\": " + String(temp) + ", \"hum\": " + String(hum) + "}";
+    //float temp = random(20, 30);  // Simulated temperature
+    //float hum = random(40, 60);   // Simulated humidity
+ 
+    String jsonData = "{\"temp\": " + String(temp) + ", \"hum\": " + String(hum) + ", \"time\": " + String(time) + ", \"pres\": " + String(pres) + "}";
 
 
     int httpResponseCode = http.POST(jsonData);
