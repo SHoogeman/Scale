@@ -90,9 +90,7 @@ void loop() {
     }
     // Clear the string for the next message
     stringComplete = false;
-    Serial.println(time);
     mass = "100";
-    time = "SUN";
     sendData(temp, hum, time, pres, mass);
     counter = 0; 
     inputString="";
@@ -114,8 +112,8 @@ void sendData(String temp, String hum, String time, String pres, String mass) {
     http.begin(*client, scriptURL);
     http.addHeader("Content-Type", "application/json");
      
-    String jsonData = "{\"temp\": " + temp + ", \"hum\": " + hum + ", \"time\": " + time + ", \"pres\": " + pres + ", \"mass\": " + mass + "}";
-
+    String jsonData = "{\"temp\": " + temp + ", \"hum\": " + hum + ", \"time\": " + "\""  + time + "\"" + ", \"pres\": " + pres + ", \"mass\": " + mass + "}";
+    Serial.println(jsonData);
     int httpResponseCode = http.POST(jsonData);
  
     Serial.println("Response code: " + String(httpResponseCode));
