@@ -90,6 +90,9 @@ void loop() {
     }
     // Clear the string for the next message
     stringComplete = false;
+    Serial.println(time);
+    mass = "100";
+    time = "SUN";
     sendData(temp, hum, time, pres, mass);
     counter = 0; 
     inputString="";

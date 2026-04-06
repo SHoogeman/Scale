@@ -22,8 +22,8 @@ BME280I2C bme;
 static DS1307 RTC; 
 
 //  pins for hx711
-uint8_t dataPinHx711 = 7;
-uint8_t clockPinHx711 = 6;
+const int dataPinHx711 = 7;
+const int clockPinHx711 = 6;
 
 //pins for SSD
 const int chipSelect = 10;
@@ -33,14 +33,17 @@ File Data;
 
 String dataString; 
 
-float f; 
+float mass; 
 float temp(NAN), hum(NAN), pres(NAN);
 
-//StaticJsonBuffer<50> jsonBuffer;
-
+int measure_interval = 1; //setting the measurement interval params. 
+const int T_init = 0; 
+int T_measure = 0; 
+int minutes; 
 
 
 void setup() {
+  
   //com to computer
   Serial.begin(9600);
   
@@ -57,8 +60,6 @@ void setup() {
   scale.set_scale(-27.967407);
   scale.tare(20);
 
-
-
   // intitialize RTC
   RTC.setHours(13);
   RTC.setMinutes(40);
@@ -68,42 +69,49 @@ void setup() {
 
   RTC.begin();
 
-
   //com to nodemcu 
   pinMode(3, INPUT);
   pinMode(5, OUTPUT);
   nodemcu.begin(115200);
-
-
-
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  
+  minutes = RTC.getMinutes(); 
 
-  BME_read();
-  f = scale.get_units(1000);
-  dataString = RTC.getDateTimeString() + "," + String(float(pres)) + "," + String(float(temp)) + "," + String(float(hum)) + "," + String(f);
-  Serial.println(dataString);
-  File Data = SD.open("datalog.txt", FILE_WRITE);
+  if (minutes >= (T_measure + T_init)) { 
 
-  // if the file is available, write to it:
-  if (Data) {
-    Data.println(dataString);
-    Data.close();
-    // print to the serial port too:
-    //Serial.println(dataString);
+    BME_read();
+
+    //mass = scale.get_units(1000);
+
+    dataString = RTC.getDateTimeString() + "," + String(float(pres)) + "," + String(float(temp)) + "," + String(float(hum));// + "," + String(mass);
+    Serial.println(dataString);
+    //File Data = SD.open("datalog.txt", FILE_WRITE);
+
+    // if the file is available, write to it:
+    //if (Data) {
+    //  Data.println(dataString);
+    //  Data.close();
+    //  // print to the serial port too:
+    //  //Serial.println(dataString);
+    //}
+    // if the file isn't open, pop up an error:
+    //else {  
+    //  Serial.println("error opening datalog.txt");
+    //}
+
+    nodemcu.println(dataString);
+    
+    T_measure += measure_interval;
+
+    if (T_measure >= 60){
+      T_measure = 0 + T_init;
+    }    
+    
   }
-  // if the file isn't open, pop up an error:
-  else {  
-    Serial.println("error opening datalog.txt");
-  }
   
-
-  nodemcu.println(dataString);
-  
-  delay(20000);
+  delay(500);
 }
 
 
