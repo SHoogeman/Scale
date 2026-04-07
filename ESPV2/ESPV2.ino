@@ -6,13 +6,13 @@
 
  
 // Replace with your WiFi and Web App details
-//const char* ssid = "📶WirelessFirmware📶";
-//const char* password = "ElektroCyberSecurityKonijn";
+const char* ssid = "📶WirelessFirmware📶";
+const char* password = "ElektroCyberSecurityKonijn";
 const char* scriptURL = "https://script.google.com/macros/s/AKfycbweea9BWjkBLszlII4J5-T4UEJ6stplfIiWQCkz4vzkXJwXTtZEKKcMP3T76XCkXbnQyA/exec";
 //const char* ssid = "S21 van Sjoerd";
 //const char* password = "ugki4500";
-const char* ssid = "XTRA-Gast";
-const char* password = "Welkom123";
+//const char* ssid = "XTRA-Gast";
+//const char* password = "Welkom123";
 
 SoftwareSerial arduino(D7, D6); //The object to receive data from arduino
 
@@ -21,6 +21,8 @@ String inputString = "";         // A String to hold incoming data
 bool stringComplete = false;      // Whether the string is complete
 
 int counter = 0;
+
+int LED = 2; 
  
 void setup() {
   Serial.begin(115200);
@@ -36,6 +38,9 @@ void setup() {
   pinMode(D6, OUTPUT);
   inputString.reserve(200); // Reserve 200 bytes for the string
 
+  pinMode(LED_BUILTIN, OUTPUT);
+  delay(100);
+  digitalWrite(LED_BUILTIN, HIGH);
 }
  
 void loop() {
@@ -90,7 +95,6 @@ void loop() {
     }
     // Clear the string for the next message
     stringComplete = false;
-    mass = "100";
     sendData(temp, hum, time, pres, mass);
     counter = 0; 
     inputString="";

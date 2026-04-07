@@ -22,8 +22,8 @@ BME280I2C bme;
 static DS1307 RTC; 
 
 //  pins for hx711
-const int dataPinHx711 = 7;
-const int clockPinHx711 = 6;
+uint8_t dataPinHx711 = 7;
+uint8_t clockPinHx711 = 6;
 
 //pins for SSD
 const int chipSelect = 10;
@@ -33,7 +33,7 @@ File Data;
 
 String dataString; 
 
-float mass; 
+float  mass; 
 float temp(NAN), hum(NAN), pres(NAN);
 
 int measure_interval = 1; //setting the measurement interval params. 
@@ -62,7 +62,8 @@ void setup() {
 
   // intitialize RTC
   RTC.setHours(13);
-  RTC.setMinutes(40);
+  RTC.setMinutes(1);
+  RTC.setSeconds(0);
   RTC.setDay(23);
   RTC.setMonth(3);
   RTC.setYear(2026);
@@ -80,32 +81,30 @@ void loop() {
   minutes = RTC.getMinutes(); 
 
   if (minutes >= (T_measure + T_init)) { 
-
+    String time = RTC.getDateTimeString();
     BME_read();
-
-    //mass = scale.get_units(1000);
-
-    dataString = RTC.getDateTimeString() + "," + String(float(pres)) + "," + String(float(temp)) + "," + String(float(hum));// + "," + String(mass);
+    mass = scale.get_units(1000);
+    dataString = time + "," + String(float(pres)) + "," + String(float(temp)) + "," + String(float(hum)) + "," + String(mass);
     Serial.println(dataString);
-    //File Data = SD.open("datalog.txt", FILE_WRITE);
+    File Data = SD.open("datalog.txt", FILE_WRITE);
 
-    // if the file is available, write to it:
-    //if (Data) {
-    //  Data.println(dataString);
-    //  Data.close();
-    //  // print to the serial port too:
-    //  //Serial.println(dataString);
-    //}
+    //if the file is available, write to it:
+    if (Data) {
+      Data.println(dataString);
+      Data.close();
+      // print to the serial port too:
+      //Serial.println(dataString);
+    }
     // if the file isn't open, pop up an error:
-    //else {  
-    //  Serial.println("error opening datalog.txt");
-    //}
+    else {  
+      Serial.println("error opening datalog.txt");
+    }
 
     nodemcu.println(dataString);
     
     T_measure += measure_interval;
 
-    if (T_measure >= 60){
+    if (T_measure >= (60 + T_init)){
       T_measure = 0 + T_init;
     }    
     
