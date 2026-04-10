@@ -6,13 +6,15 @@
 
  
 // Replace with your WiFi and Web App details
-const char* ssid = "📶WirelessFirmware📶";
-const char* password = "ElektroCyberSecurityKonijn";
-const char* scriptURL = "https://script.google.com/macros/s/AKfycbweea9BWjkBLszlII4J5-T4UEJ6stplfIiWQCkz4vzkXJwXTtZEKKcMP3T76XCkXbnQyA/exec";
+//const char* ssid = "📶WirelessFirmware📶";
+//const char* password = "ElektroCyberSecurityKonijn";
+const char* scriptURL = "https://script.google.com/macros/s/AKfycbzoZv4eD9UPSmeDhpmLh2KoxtokyTuAPCD5XNBmMA7akghhxqJuvklBmEfK38Qk9Bmt/exec";
 //const char* ssid = "S21 van Sjoerd";
 //const char* password = "ugki4500";
 //const char* ssid = "XTRA-Gast";
 //const char* password = "Welkom123";
+const char* ssid = "TUD-facility";
+const char* password = "646cc23c9edd7";
 
 SoftwareSerial arduino(D7, D6); //The object to receive data from arduino
 

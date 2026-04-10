@@ -56,17 +56,18 @@ void setup() {
   //begin SD reader
   SD.begin(chipSelect);
   //scale set offset and constants then set current weight to zero 
-  scale.set_offset(172001);
-  scale.set_scale(-27.967407);
+  scale.set_offset(174640);
+  scale.set_scale(-27.830516);
   scale.tare(20);
 
   // intitialize RTC
   RTC.setHours(13);
-  RTC.setMinutes(1);
+  RTC.setMinutes(45);
   RTC.setSeconds(0);
-  RTC.setDay(23);
-  RTC.setMonth(3);
+  RTC.setDay(9);
+  RTC.setMonth(4);
   RTC.setYear(2026);
+  
 
   RTC.begin();
 
