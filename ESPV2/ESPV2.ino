@@ -6,13 +6,9 @@
 
  
 // Replace with your WiFi and Web App details
-//const char* ssid = "📶WirelessFirmware📶";
-//const char* password = "ElektroCyberSecurityKonijn";
-const char* scriptURL = "https://script.google.com/macros/s/AKfycbzoZv4eD9UPSmeDhpmLh2KoxtokyTuAPCD5XNBmMA7akghhxqJuvklBmEfK38Qk9Bmt/exec";
-//const char* ssid = "S21 van Sjoerd";
-//const char* password = "ugki4500";
-//const char* ssid = "XTRA-Gast";
-//const char* password = "Welkom123";
+
+const char* scriptURL = "https://script.google.com/macros/s/AKfycbwlGBjL5e06fL0nQXsFdjupKoZui81lZfJ6SmlX5Tz3o24qniGRE1Ui-OdfEi11PACh/exec";
+
 const char* ssid = "TUD-facility";
 const char* password = "646cc23c9edd7";
 
@@ -57,9 +53,16 @@ void loop() {
   if (stringComplete) {
 
     String time = "";
-    String pres = "";
-    String temp = "";
-    String hum = "";
+    
+    String hum1 = "";
+    String pres1 = "";
+    String temp1 = "";
+
+    String hum2 = "";
+    String pres2 = "";
+    String temp2 = "";
+
+    String amp = "";
     String mass = "";
     Serial.println(inputString);
 
@@ -74,22 +77,37 @@ void loop() {
            }
            break;
            case 1:{
-             pres += char(inputString[i]);
+             pres1 += char(inputString[i]);
            }
            break;
            case 2:{
-             temp += char(inputString[i]);
+             temp1 += char(inputString[i]);
            }
            break;
            case 3:{
-             hum += char(inputString[i]);
+             hum1 += char(inputString[i]);
            }
           break;
           case 4:{
+            pres2 += char(inputString[i]);
+          }
+          break;
+          case 5:{
+            temp2 += char(inputString[i]);
+          }
+          break;
+          case 6:{
+            hum2 += char(inputString[i]);
+          }
+          break;
+          case 7:{
             mass += char(inputString[i]);
           }
           break;
-
+          case 8:{
+            amp += char(inputString[i]);
+          }
+          break;
           default: {
           }    
         }
@@ -97,16 +115,17 @@ void loop() {
     }
     // Clear the string for the next message
     stringComplete = false;
-    sendData(temp, hum, time, pres, mass);
+    sendData(temp1, hum1, time, pres1, mass, amp, hum2, temp2, pres2);
     counter = 0; 
     inputString="";
+    
   }
   delay(100);
 }
 
 
 
-void sendData(String temp, String hum, String time, String pres, String mass) {
+void sendData(String temp1, String hum1, String time, String pres1, String mass, String amp, String hum2, String temp2, String pres2) {
   
   if (WiFi.status() == WL_CONNECTED) {
 
@@ -118,7 +137,7 @@ void sendData(String temp, String hum, String time, String pres, String mass) {
     http.begin(*client, scriptURL);
     http.addHeader("Content-Type", "application/json");
      
-    String jsonData = "{\"temp\": " + temp + ", \"hum\": " + hum + ", \"time\": " + "\""  + time + "\"" + ", \"pres\": " + pres + ", \"mass\": " + mass + "}";
+    String jsonData = "{\"temp1\": " + temp1 + ", \"hum1\": " + hum1 + ", \"time\": " + "\""  + time + "\"" + ", \"pres1\": " + pres1 + ", \"mass\": " + mass + ", \"hum2\": " + hum2 + ", \"temp2\": " + temp2 +", \"pres2\": "+ pres2 + ", \"amp\": " + amp + "}";
     Serial.println(jsonData);
     int httpResponseCode = http.POST(jsonData);
  
