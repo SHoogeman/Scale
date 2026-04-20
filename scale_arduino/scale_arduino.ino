@@ -1,5 +1,5 @@
 // including the libraries for hx711, RTC, BME280 and SD card
-#include <HX711.h>3
+#include <HX711.h>
 #include <Wire.h>
 #include <I2C_RTC.h>
 #include <SD.h>
