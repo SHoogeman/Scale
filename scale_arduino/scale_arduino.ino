@@ -95,7 +95,7 @@ void loop() {
     float Humi2 = bme2.readHumidity();
     float Pres2 = bme2.readPressure();
 
-    // Let op: 1000 iteraties op HX711 kan erg lang duren. Aangepast naar 10 voor de stabiliteit.
+    // 10 points. 
     float mass = scale.get_units(10); 
 
     // 1. Print naar Serial
