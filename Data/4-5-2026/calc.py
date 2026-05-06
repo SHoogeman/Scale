@@ -10,7 +10,7 @@ data_path = path + fr"\Data\4-5-2026\datalog.txt"
 def linear(x):
     return a*x + b
 
-data = np.loadtxt(data_path, delimiter=',', skiprows=0, dtype=str)[117:]
+data = np.loadtxt(data_path, delimiter=',', skiprows=0, dtype=str)[117:] #indexed because some rows are not data, but tests. 
 
 Time = data[:, 0]
 Pressure1 = data[:, 1].astype(float)
