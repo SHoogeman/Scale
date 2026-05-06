@@ -29,11 +29,14 @@ Adafruit_BME280 bme1; // I2C device 1
 Adafruit_BME280 bme2; // I2C device 2
 
 const int measure_interval = 1; 
-int T_measure = 54; 
+int T_measure = 3; 
 
 void setup() {
   // com to computer
   Serial.begin(19200);
+
+  delay(500);
+
   
   // begin wire
   Wire.begin();
@@ -49,14 +52,13 @@ void setup() {
   SD.begin(chipSelect);
   
   // scale set offset and constants then set current weight to zero 
-  scale.set_offset(174640); //calibration
-  scale.set_scale(-27.830516); //rc
-  scale.tare(20);
+  //scale.set_scale(-19.448113373468736); //rc
+  //scale.tare(20);
 
   // intitialize RTC
   RTC.begin();
-  RTC.setHours(13); // begin time  
-  RTC.setMinutes(57);
+  RTC.setHours(16); // begin time  
+  RTC.setMinutes(15);
   RTC.setSeconds(0);
 
   // com to nodemcu 
@@ -96,7 +98,7 @@ void loop() {
     float Pres2 = bme2.readPressure();
 
     // 10 points. 
-    float mass = scale.get_units(10); 
+    float mass = scale.read_average(10); 
 
     // 1. Print naar Serial
     printDataStream(Serial, Pres1, Temp1, Humi1, Pres2, Temp2, Humi2, mass, Amp);
