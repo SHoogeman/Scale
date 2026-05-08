@@ -57,8 +57,8 @@ void setup() {
 
   // intitialize RTC
   RTC.begin();
-  RTC.setHours(16); // begin time  
-  RTC.setMinutes(15);
+  RTC.setHours(15); // begin time  
+  RTC.setMinutes(23);
   RTC.setSeconds(0);
 
   // com to nodemcu 
