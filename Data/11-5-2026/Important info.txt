@@ -1,0 +1,2 @@
+The BME sensor for the inlet was moved further away to measure the ambient air.
+The weather was horrible. their is chance that the measurement device got wet and had some shorts. see data. 

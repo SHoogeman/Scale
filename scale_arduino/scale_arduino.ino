@@ -29,7 +29,7 @@ Adafruit_BME280 bme1; // I2C device 1
 Adafruit_BME280 bme2; // I2C device 2
 
 const int measure_interval = 1; 
-int T_measure = 3; 
+int T_measure = 17; 
 
 void setup() {
   // com to computer
@@ -57,8 +57,8 @@ void setup() {
 
   // intitialize RTC
   RTC.begin();
-  RTC.setHours(15); // begin time  
-  RTC.setMinutes(23);
+  RTC.setHours(9); // begin time  
+  RTC.setMinutes(18);
   RTC.setSeconds(0);
 
   // com to nodemcu 
