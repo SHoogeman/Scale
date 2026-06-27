@@ -5,12 +5,12 @@ a = -3.79435112675148e-05
 b = -19.448113373468736
 
 path = os.getcwd() 
-data_path = path + fr"\Scale\Data\find data\datalog.txt"
+data_path = path + fr"\Scale\Data\2-6-2026\datalog.txt"
 
 def linear(x):
     return a*x + b
 
-data = np.loadtxt(data_path, delimiter=',', skiprows=0, dtype=str)[16:] #indexed because some rows are not data, but tests. 
+data = np.loadtxt(data_path, delimiter=',', skiprows=0, dtype=str)[4:] #indexed because some rows are not data, but tests. 
 
 Time = data[:, 0]
 Pressure1 = data[:, 1].astype(float)
