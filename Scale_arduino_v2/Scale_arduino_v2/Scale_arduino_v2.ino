@@ -11,6 +11,9 @@
 #define MUX_ADDR 0x70
 #define ESP32_MUX_CH 5 // <-- Set this to the MUX channel your ESP32 is wired to
 
+#define LedPinRed 2
+#define LedPinGreen 3
+
 // -------------------------------------------------------------------------
 // MEMORY SAVED: Custom stream class to slice data on-the-fly without String allocation
 // -------------------------------------------------------------------------
@@ -68,7 +71,7 @@ class I2CChunkStream : public Print {
 I2CChunkStream esp32I2C(SLAVE_ADDR);
 
 HX711 scale;
-static DS1307 RTC; 
+static DS3231 RTC; 
 FS3000 fs;
 
 const uint8_t dataPinHx711 = 7;
@@ -89,25 +92,25 @@ uint8_t T_measure = 5;
 void setup() {
   Serial.begin(19200);
   delay(500);
-  
+
+  Serial.println("hello");
   Wire.begin();
   scale.begin(dataPinHx711, clockPinHx711);
-
   pca9548a_select(0);   bme.begin(0x76);
+  Serial.println("hello");
 
   pca9548a_select(1);   bme.begin(0x76);
   pca9548a_select(2);   bme.begin(0x76);
-
+  
   SD.begin(chipSelect);
 
-  pca9548a_select(7);
-  RTC.begin();
-  RTC.setHours(14);   
-  RTC.setMinutes(5);
-  RTC.setSeconds(0);
+  pca9548a_select(7); RTC.begin();
 
   pca9548a_select(3);   fs.begin(); fs.setRange(AIRFLOW_RANGE_15_MPS); 
   pca9548a_select(4);   fs.begin(); fs.setRange(AIRFLOW_RANGE_15_MPS);
+
+  pinMode(LedPinRed, OUTPUT);
+  pinMode(LedPinGreen, OUTPUT);
 
 }
 
@@ -115,15 +118,15 @@ void setup() {
 void printDataStream(Print &output, uint8_t targetMuxChannel, float p1, float t1, float h1, float p2, float t2, float h2, float p3, float t3, float h3, float v1, float v2, float m, float amp) {
   // Grab timestamp from channel 7
   pca9548a_select(7);
-  uint8_t hrs = RTC.getHours();
-  uint8_t mins = RTC.getMinutes();
+  String date = RTC.getDateString();
+  String time = RTC.getTimeString();
 
   // Instantly restore MUX path back to the intended device destination before printing
   pca9548a_select(targetMuxChannel);
 
-  output.print(hrs);
-  output.print(F(":"));
-  output.print(mins);
+  output.print(date);
+  output.print(F(" "));
+  output.print(time);
   output.print(F(","));
   output.print(p1);  output.print(F(","));
   output.print(t1);  output.print(F(","));
@@ -190,8 +193,12 @@ void loop() {
     if (Data) {
       printDataStream(Data, 7, Pres1, Temp1, Humi1, Pres2, Temp2, Humi2, Pres3, Temp3, Humi3, v1, v2, mass, Amp);
       Data.close();
+      digitalWrite(LedPinGreen, HIGH);
+      digitalWrite(LedPinRed, LOW);
     } else {  
       Serial.println(F("error opening datalog.txt")); 
+      digitalWrite(LedPinRed, HIGH);
+      digitalWrite(LedPinGreen, LOW);
     }
     
     T_measure += measure_interval;
