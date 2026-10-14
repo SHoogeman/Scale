@@ -9,7 +9,7 @@
 // Target ESP32 I2C Address and Multiplexer Configuration
 #define SLAVE_ADDR 0x55
 #define MUX_ADDR 0x70
-#define ESP32_MUX_CH 5 // <-- Set this to the MUX channel your ESP32 is wired to
+#define ESP32_MUX_CH 6 // <-- Set this to the MUX channel your ESP32 is wired to
 
 #define LedPinRed 2
 #define LedPinGreen 3
@@ -89,15 +89,14 @@ Adafruit_BME280 bme;
 const uint8_t measure_interval = 1; 
 uint8_t T_measure = 5; 
 
+
 void setup() {
-  Serial.begin(19200);
+  Serial.begin(115200);
   delay(500);
 
-  Serial.println("hello");
   Wire.begin();
   scale.begin(dataPinHx711, clockPinHx711);
   pca9548a_select(0);   bme.begin(0x76);
-  Serial.println("hello");
 
   pca9548a_select(1);   bme.begin(0x76);
   pca9548a_select(2);   bme.begin(0x76);
@@ -111,6 +110,10 @@ void setup() {
 
   pinMode(LedPinRed, OUTPUT);
   pinMode(LedPinGreen, OUTPUT);
+  
+  delay(200);
+  pca9548a_select(7);
+  uint8_t T_measure = RTC.getMinutes();
 
 }
 
@@ -144,10 +147,11 @@ void printDataStream(Print &output, uint8_t targetMuxChannel, float p1, float t1
 }
 
 void loop() {
+
   pca9548a_select(7);
   uint8_t minutes = RTC.getMinutes(); 
   Serial.println(T_measure);
-  
+
   if (minutes >= T_measure) { 
     float Amp = readACCurrentValue();
     // float Amp = 1.45;
@@ -182,11 +186,14 @@ void loop() {
 
     // 1. Print locally to Hardware Serial Monitor (MUX destination doesn't matter for Serial)
     Serial.print(F("Sending packet: "));
+
+  
     printDataStream(Serial, 7, Pres1, Temp1, Humi1, Pres2, Temp2, Humi2, Pres3, Temp3, Humi3, v1, v2, mass, Amp);
     
+    printDataStream(esp32I2C, ESP32_MUX_CH, Pres1, Temp1, Humi1, Pres2, Temp2, Humi2, Pres3, Temp3, Humi3, v1, v2, mass, Amp);
+
     // 2. Transmit to ESP32 over I2C in optimized 30-byte segments
     // Enforces strict redirection to your ESP32's actual MUX branch
-    printDataStream(esp32I2C, ESP32_MUX_CH, Pres1, Temp1, Humi1, Pres2, Temp2, Humi2, Pres3, Temp3, Humi3, v1, v2, mass, Amp);
     
     // 3. Log values onto Local micro-SD Card (SPI interface, MUX channel safe)
     File Data = SD.open("datalog.txt", FILE_WRITE);

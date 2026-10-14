@@ -6,7 +6,7 @@
 
 const char* ssid = "S21 van Sjoerd";
 const char* password = "ugki4500";
-const char* scriptURL = "https://script.google.com/macros/s/AKfycbxg9RNkQSNCmo-WltfSg_L_30SMwNLjriTABvHcQSdlwPJkw_78psGgDbofR6WGRQxUOQ/exec";
+const char* scriptURL = "https://script.google.com/macros/s/AKfycbxWAr_kMeby1LsUuoVyyNGm05QfF062mMueQDR7VMfMgVgZlLkew0piug8uW86KHOeHLQ/exec";
 
 // Global buffer to accumulate incoming I2C chunks
 String inputString = ""; 
@@ -27,13 +27,14 @@ void setup() {
   Serial.println("Connected to WiFi");
 
   Wire.onReceive(onReceive);
+  Wire.setPins(23, 22);
+
   Wire.begin((uint8_t)I2C_DEV_ADDR);
   Serial.printf("I2C Slave ready at address: 0x%02X\n", I2C_DEV_ADDR);
 }
 
 void loop() {
   // Check if the I2C interrupt flagged a completed message
-  Serial.println("cool");
   if (messageReady) {
     String messageToProcess = inputString;
     inputString = ""; // Reset buffer immediately
@@ -45,7 +46,6 @@ void loop() {
 
 // I2C Callback context runs on an interrupt thread
 void onReceive(int len) {
-  Serial.println("receive");
   while (Wire.available()) {
     char inChar = Wire.read();
     
@@ -102,5 +102,7 @@ void parseAndSendData(String data) {
     http.end();
   } else {
     Serial.println("WiFi Disconnected");
+    WiFi.begin(ssid, password);
+
   }
 }

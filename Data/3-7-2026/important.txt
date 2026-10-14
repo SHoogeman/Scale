@@ -1,0 +1,7 @@
+Calibration three was used here
+skipped first three rows for the data analysis. 
+
+
+data is formated as: 
+
+Date time, Pressure_out, Temp_out, humidity_out, Pressure_ambient, Temp_ambient, Humidity_ambient, Pressure_input, temp_input, humidity_input, V_out, V_in, Mass, Current.

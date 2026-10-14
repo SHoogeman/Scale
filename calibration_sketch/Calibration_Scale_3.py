@@ -12,7 +12,22 @@ def linear(x, a, b):
 
 pop, cov = curve_fit(linear, Count, Mass)
 
-print("a:", pop[0], "b:", pop[1])
+print("Covariance matrix:\n", cov)
+
+perr = np.sqrt(np.diag(cov))
+
+
+print("a =", pop[0], "±", perr[0])
+print("b =", pop[1], "±", perr[1])
+
+
+
+def sigma(a, U_a, b, U_b, Count): #uncertainty propagation with u(Count) == zero 
+    return np.sqrt((Count*(U_a))**2 + (U_b)**2)
+
+Count = -3099282.25
+
+print("Uncertainty in Mass for a mass of 109.00 Kg:", sigma(pop[0], perr[0], pop[1], perr[1], Count))
 
 plt.figure()
 plt.plot(Count, linear(Count, *pop), label="fit")
