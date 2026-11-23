@@ -23,11 +23,16 @@ class Formula:
         return AH
 
     def Flow(self, A_in: float, A_out: float, V_out: float, V_in: float, T_out: float, T_in: float, RH_out: float, RH_in: float) -> float:
-        """The function calculates the flow in kg given the area A in m2, the volume flow rates V_out and V_in in m3/s,
-        the temperatures T_out and T_in in Celsius, and the relative humidities RH_out and RH_in in percentage."""
+        """Calculate net water mass flow in kg/s.
+
+        V_in and V_out are volumetric flow rates in m3/s. Since these already
+        include the cross-sectional area, multiplying them by A_in/A_out
+        would count the area twice. The area arguments remain for compatibility.
+        Positive values represent net inflow.
+        """
         AH_out = self.AH(T_out, RH_out)
         AH_in = self.AH(T_in, RH_in)
-        Flow = -1 * (A_out * V_out * AH_out - A_in * V_in * AH_in) / 1000
+        Flow = (V_in * AH_in - V_out * AH_out) / 1000
         return Flow
 
     def Count_to_mass_call_3(self, Count: float) -> float:

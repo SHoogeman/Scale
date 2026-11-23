@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os 
-from Formulas import Flow
 
 a = -3.79435112675148e-05
 b = -19.448113373468736

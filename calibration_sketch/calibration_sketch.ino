@@ -23,7 +23,6 @@ void setup()
 
   scale.begin(dataPin, clockPin);
 
-  scale.tare();
 }
 
 

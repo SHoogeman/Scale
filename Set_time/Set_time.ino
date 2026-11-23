@@ -5,12 +5,16 @@ static DS3231 RTC;
 
 #define MUX_ADDR 0x70
 
+int SDA_PIN = 21;
+int SCL_PIN = 22; 
 
 void setup() {
   // put your setup code here, to run once:
+  Wire.begin(SDA_PIN, SCL_PIN);
+
   RTC.begin();
 
-  Serial.begin(115200);
+  Serial.begin(9600);
     pca9548a_select(7);
     RTC.begin();
 
@@ -22,12 +26,12 @@ void setup() {
         //RTC.setMeridiem(HOUR_PM);
     }
 
-    RTC.setDay(1);
-    RTC.setMonth(7);
+    RTC.setDay(15);
+    RTC.setMonth(11);
     RTC.setYear(2026);
 
-    RTC.setHours(9);
-    RTC.setMinutes(24);
+    RTC.setHours(13);
+    RTC.setMinutes(6);
     RTC.setSeconds(25);
 
     //RTC.setWeek(1); // To update the week manually.

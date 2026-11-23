@@ -5,7 +5,7 @@ a = -3.79435112675148e-05
 b = -19.448113373468736
 
 path = os.getcwd() 
-data_path = path + fr"\Data\4-5-2026\datalog.txt"
+data_path = path + fr"\Scale\Data\4-5-2026\datalog.txt"
 
 def linear(x):
     return a*x + b

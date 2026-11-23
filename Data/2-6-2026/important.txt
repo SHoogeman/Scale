@@ -1,3 +1,14 @@
-moved the hum temp and pressure sensor to the inlet again
+Data is formatted as followed: Time; Pressure output in pascal; Temp output in celsius; humidity output in %; Pressure input in pascal; Temp input in celsius; humidity input in %; Mass in counts; Current in amperes;
 
-The save got errors that are very weird. 
+The mass can be converted from counts to KG as followed: Mass = a*counts + b
+
+Dataset starts at 2-6-2026
+
+a = -3.79435112675148e-05
+b = -19.448113373468736
+
+
+the input sensor was located directly at the intake. 
+
+
+During the measurements the scale probably got damaged by overflowing. 
